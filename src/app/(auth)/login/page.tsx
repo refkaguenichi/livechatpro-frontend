@@ -1,20 +1,21 @@
 'use client';
 import Link from 'next/link';
 import { useState } from 'react';
-import axios from 'axios';
+import { useRouter } from 'next/navigation';
+import { withAuth } from '@/components/WithAuth';
+import api from '@/utils/api';
 
-export default function LoginPage() {
+function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const router = useRouter();
 
-  // Dummy submit, replace with API call
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:1000/user/login', { email, password });
-      localStorage.setItem('token', res.data.token); // Save JWT
-      // Redirect to dashboard, etc.
+      await api.post('/user/login', { email, password });
+      router.push('/dashboard'); // Redirect to dashboard
     } catch (err: any) {
       setError(err.response?.data?.message || 'Login failed');
     }
@@ -27,26 +28,26 @@ export default function LoginPage() {
         <div className="flex flex-col gap-1">
           <label htmlFor="email">Email</label>
           <input
-          id="email"
-          type="email"
-          placeholder="Enter your Email"
-          className="input input-bordered w-full mb-4"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          required
-        />
+            id="email"
+            type="email"
+            placeholder="Enter your Email"
+            className="input input-bordered w-full mb-4"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
         </div>
         <div className="flex flex-col gap-1">
           <label htmlFor="password">Password</label>
-        <input
-          id="password"
-          type="password"
-          placeholder="Enter your Password"
-          className="input input-bordered w-full mb-6"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          required
-        />
+          <input
+            id="password"
+            type="password"
+            placeholder="Enter your Password"
+            className="input input-bordered w-full mb-6"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
         </div>
         {error && <p className="text-red-500">{error}</p>}
         <button type="submit" className="btn btn-primary w-full">Login</button>
@@ -58,3 +59,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
+export default withAuth(LoginPage, false);

@@ -1,4 +1,8 @@
-export default function Dashboard() {
+'use client';
+
+import { withAuth } from "@/components/WithAuth";
+
+function Dashboard() {
   return (
     <div>
       <h1 className="text-3xl font-bold mb-6 text-primary">Dashboard</h1>
@@ -19,3 +23,5 @@ export default function Dashboard() {
     </div>
   );
 }
+
+export default withAuth(Dashboard, true); // true = auth required

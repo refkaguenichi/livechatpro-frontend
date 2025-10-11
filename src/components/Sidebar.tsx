@@ -1,16 +1,26 @@
 'use client';
+import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { FaComments, FaChartBar, FaSignOutAlt } from "react-icons/fa";
 
 const navItems = [
   { name: 'Dashboard', href: '/dashboard', icon: <FaChartBar /> },
   { name: 'Chat', href: '/chat', icon: <FaComments /> },
-  // Add more links as needed
 ];
 
 export default function Sidebar() {
   const pathname = usePathname();
+    const { logout, user } = useAuth();
+    const router = useRouter();
+    const handleLogout = async () => {
+    try {
+      await logout();
+      router.push("/login"); // Redirect to login after logout
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
+  };
   return (
     <aside className="w-60 bg-white shadow-lg flex flex-col py-8 px-4">
       <div className="mb-8 text-2xl font-bold text-primary text-center">
@@ -30,7 +40,8 @@ export default function Sidebar() {
         ))}
       </nav>
       <div className="mt-auto">
-        <button className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 w-full">
+        <button className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 w-full"
+          onClick={handleLogout}>
           <FaSignOutAlt />
           Logout
         </button>

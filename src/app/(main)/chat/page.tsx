@@ -1,7 +1,8 @@
 'use client';
+import { withAuth } from '@/components/WithAuth';
 import { useState } from 'react';
 
-export default function ChatPage() {
+function ChatPage() {
   const [messages, setMessages] = useState([
     { user: 'Agent', text: 'Hello, how can I help you?' },
     { user: 'You', text: 'I have a question about my account.' }
@@ -42,3 +43,5 @@ export default function ChatPage() {
     </div>
   );
 }
+
+export default withAuth(ChatPage, true); // true = auth required
