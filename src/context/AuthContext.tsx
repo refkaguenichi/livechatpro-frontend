@@ -1,6 +1,6 @@
 'use client';
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import axios from 'axios';
+import api from '@/utils/api';
 
 type User = {
   id: string;
@@ -13,6 +13,7 @@ type AuthContextType = {
   loading: boolean;
   isAuthenticated: boolean;
   logout: () => Promise<void>;
+  loginUser: (user: User) => void;
 };
 
 const AuthContext = createContext<AuthContextType>({
@@ -20,6 +21,7 @@ const AuthContext = createContext<AuthContextType>({
   loading: true,
   isAuthenticated: false,
   logout: async () => {},
+  loginUser: () => {},
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -27,25 +29,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch the user profile on initial load
     const fetchProfile = async () => {
       try {
-        const response = await fetch('http://localhost:1000/user/profile', {
-          method: 'GET',
-          credentials: 'include', // Include cookies if needed
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch profile');
-        }
-
-        const data = await response.json();
-        setUser(data.user); // Set the user state with the fetched profile
+        const response = await api.get('/user/profile'); // ✅ use Axios instance
+        setUser(response.data.user); // Axios responses are in response.data
       } catch (error) {
         console.error('Error fetching profile:', error);
-        setUser(null); // Set user to null if fetching fails
+        setUser(null);
       } finally {
-        setLoading(false); // Ensure loading is set to false
+        setLoading(false);
       }
     };
 
@@ -54,17 +46,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = async () => {
     try {
-      await axios.post('http://localhost:1000/user/logout', {}, { withCredentials: true });
+      await api.post('/user/logout'); // ✅ also use api for consistency
       setUser(null);
     } catch (error) {
       console.error('Logout failed', error);
     }
   };
 
+  const loginUser = (userData: User) => {
+    setUser(userData);
+  };
+
   const isAuthenticated = !!user;
 
   return (
-    <AuthContext.Provider value={{ user, loading, isAuthenticated, logout }}>
+    <AuthContext.Provider value={{ user, loading, isAuthenticated, logout, loginUser }}>
       {children}
     </AuthContext.Provider>
   );

@@ -14,7 +14,7 @@ export default function GoogleCallback() {
 
         if (token) {
           await api.post('/user/google/callback', { token },{withCredentials:true}); // Example endpoint for Google callback
-          router.push('/dashboard'); // Redirect to dashboard
+          router.push('/'); // Redirect to dashboard
         } else {
           router.push('/login'); // Redirect to login if no token
         }

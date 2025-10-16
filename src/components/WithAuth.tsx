@@ -16,7 +16,7 @@ export function withAuth(Component: React.ComponentType, requireAuth: boolean) {
         router.replace("/login");
       } else if (!requireAuth && isAuthenticated) {
         // Guest page, user is logged in
-        router.replace("/dashboard");
+        router.replace("/");
       }
       // Otherwise, allow access
     }, [isAuthenticated, loading, router, requireAuth]);
