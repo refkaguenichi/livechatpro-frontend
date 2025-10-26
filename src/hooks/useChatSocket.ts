@@ -10,7 +10,7 @@ export function useChatSocket(
   const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
-    const url = process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:1000';
+    const url = process.env.NEXT_PUBLIC_SERVER_API_URL;
     const socket = io(url, {
       transports: ['websocket'],
       withCredentials: true, // enable only if you need cookies on WS

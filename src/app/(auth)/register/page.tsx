@@ -68,7 +68,7 @@ function RegisterPage() {
         {error && <p className="text-red-500">{error}</p>}
         <div className="w-full flex flex-col items-center gap-3 mt-4">
           <button type="submit" className="w-full btn btn-primary">Register</button>
-          <a href="http://localhost:1000/auth/google" className='w-full hover:!no-underline !no-underline'>
+          <a href={`${process.env.NEXT_PUBLIC_SERVER_API_URL}/auth/google`} className='w-full hover:!no-underline !no-underline'>
           <button
             type="button"
             className="w-full btn btn-secondary flex items-center justify-center gap-2"

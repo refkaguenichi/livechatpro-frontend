@@ -60,7 +60,7 @@ function LoginPage() {
           <button type="submit" className="w-full btn btn-primary">
             Login
           </button>
-          <a href="http://localhost:1000/auth/google" className='w-full hover:!no-underline !no-underline'>
+          <a href={`${process.env.NEXT_PUBLIC_SERVER_API_URL}/auth/google`} className='w-full hover:!no-underline !no-underline'>
           <button
             type="button"
             className="w-full btn btn-secondary flex items-center justify-center gap-2"
